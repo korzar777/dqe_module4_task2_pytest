@@ -1,0 +1,7 @@
+ERROR    test_trn_db_hr_employees:test_trn_db_hr_employees.py:45 hr.employees has 3 rows with non-positive salary
+ERROR    test_trn_db_hr_employees:test_trn_db_hr_employees.py:46 
+FAILED ROWS:
+   employee_id salary
+0          207   0.00
+1          208   0.00
+2          209   0.00

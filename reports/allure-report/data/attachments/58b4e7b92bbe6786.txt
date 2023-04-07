@@ -1,0 +1,5 @@
+ERROR    test_trn_db_hr_locations:test_trn_db_hr_locations.py:43 hr.locations has 1 rows with max allowed length of address
+ERROR    test_trn_db_hr_locations:test_trn_db_hr_locations.py:44 
+FAILED ROWS:
+   location_id                            street_address
+0         2500  Magdalen Centre, The Oxford Science Park

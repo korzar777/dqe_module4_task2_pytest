@@ -1,0 +1,14 @@
+2023-04-07 17:55:42 [   ERROR] : test_salary_is_positive_for_all_employees :hr.employees has 3 rows with non-positive salary (test_trn_db_hr_employees.py:45)
+2023-04-07 17:55:42 [   ERROR] : test_salary_is_positive_for_all_employees :
+FAILED ROWS:
+   employee_id salary
+0          207   0.00
+1          208   0.00
+2          209   0.00
+ (test_trn_db_hr_employees.py:46)
+2023-04-07 17:55:43 [   ERROR] : test_adress_length_is_less_than_column_size_locations_table :hr.locations has 1 rows with max allowed length of address (test_trn_db_hr_locations.py:43)
+2023-04-07 17:55:43 [   ERROR] : test_adress_length_is_less_than_column_size_locations_table :
+FAILED ROWS:
+   location_id                            street_address
+0         2500  Magdalen Centre, The Oxford Science Park
+ (test_trn_db_hr_locations.py:44)
