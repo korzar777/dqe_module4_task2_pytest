@@ -11,6 +11,8 @@ Fails are logged to files and Allure report is generated
 
 ## Preparing environment for tests execution
 ```bash
+python -m venv venv 
+venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
