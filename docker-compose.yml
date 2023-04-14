@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  jenkins:
+    image: "jenkins/jenkins"
+    environment:
+      CHECK_RESULTS_EVERY_SECONDS: 1
+      KEEP_HISTORY: 1
+    ports:
+      - "9090:9090"
