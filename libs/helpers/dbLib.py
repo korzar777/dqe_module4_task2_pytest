@@ -14,8 +14,11 @@ class DbLib:
 
     #@keyword
     def execute_sql(self, sql: str):
-        url = 'mssql+pyodbc://{}:{}@{}:{}/{}?driver={}'.format(self.dbdata['username'], self.dbdata['password'], self.dbdata['server'],
-                                                               self.dbdata['port'], self.dbdata['database'], 'SQL+Server')
+        #url = 'mssql+pyodbc://{}:{}@{}:{}/{}?driver={}'.format(self.dbdata['username'], self.dbdata['password'], self.dbdata['server'],
+        #                                                       self.dbdata['port'], self.dbdata['database'], 'SQL+Server')
+        url = 'mssql+pymssql://{}:{}@{}/{}?port={}'.format(self.dbdata['username'], self.dbdata['password'], self.dbdata['server'],
+                                                               self.dbdata['database'],  self.dbdata['port'])
+
         engine = create_engine(url)
         with engine.connect().execution_options(autocommit=True) as conn:
             query = conn.execute(text(sql))
