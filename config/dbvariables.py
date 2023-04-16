@@ -1,7 +1,7 @@
 
 #default database configuration - should be used in config file or db, may be encripted
 def db_variables(key=None):
-    variables = {'server':  '169.254.219.163',  #'localhost',
+    variables = {'server':  '192.168.100.5',  #'localhost',
                  'port': '1433', # '1433', #'57175',
                  'database': 'TRN',
                  'username': 'DQTestUser',
