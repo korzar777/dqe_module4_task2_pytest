@@ -20,7 +20,7 @@ class DbLib:
                                                                self.dbdata['database'])
         #url = 'mssql+pymssql://{}:{}@{}/{}?port={}?trusted_connection=yes'.format(self.dbdata['username'], self.dbdata['password'], self.dbdata['server'],
         #                                                       self.dbdata['database'],  self.dbdata['port'])
-
+        #some fake change
         engine = create_engine(url)
         with engine.connect().execution_options(autocommit=True) as conn:
             query = conn.execute(text(sql))
