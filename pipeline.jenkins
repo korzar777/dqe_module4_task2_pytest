@@ -62,13 +62,6 @@ pipeline {
                 echo "Branch ${env.GIT_BRANCH} and ${env.BRANCH_NAME}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
 
-                    // We need to explicitly checkout from SCM here
-                    echo 'Clean up workspace before we start ..'
-                    cleanWs()
-                    checkout scm
-                    echo 'Building..'
-                    //sh 'python3 -m pip install --upgrade pip'
-
                     sh 'python3 -m venv venv'
                     sh '. venv/bin/activate'
                     sh 'pip install -r requirements.txt'
@@ -81,8 +74,8 @@ pipeline {
                 echo 'Testing..'
 
                 withEnv(["HOME=${env.WORKSPACE}"]) {
-                    sh "python3 -m pytest -m jobs --alluredir=reports/allure_results"
-                    //sh 'python3 -m pytest  --alluredir=reports/allure-results'
+                    //sh "python3 -m pytest -m jobs --alluredir=reports/allure_results"
+                    sh 'python3 -m pytest  --alluredir=reports/allure-results'
                 }
             }
             post {
