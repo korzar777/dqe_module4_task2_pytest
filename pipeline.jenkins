@@ -22,12 +22,13 @@ pipeline {
         stage('Build') {
 
             steps {
+                script {
                 if (env.GIT_BRANCH == env.DEV_BRANCH) {
                         TARGET_BRANCH = env.PREPROD_BRANCH
                     } else {
                         TARGET_BRANCH = env.PROD_BRANCH
                     }
-
+                }
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
                 echo "Branch ${env.GIT_BRANCH} and ${env.BRANCH_NAME}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
