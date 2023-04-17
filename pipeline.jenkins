@@ -8,7 +8,7 @@ pipeline {
         PREPROD_BRANCH = 'pre-prod'
         PROD_BRANCH = 'production'
         DEV_BRANCH = "dev_local"
-        TARGET_BRANCH = ''
+        TARGET_BRANCH =  ""
     }
     options {
         // This is required if you want to clean before build
@@ -20,23 +20,40 @@ pipeline {
         //        checkout scmGit(branches: [[name: 'origin/dev_local']], extensions: [], userRemoteConfigs: [[credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', url: 'https://github.com/korzar777/dqe_module4_task2_pytest.git/']])
         //    }
         //}
-        stage('Build') {
 
+        stage('Preparing') {
             steps {
                 script {
 
-                    if (env.GIT_BRANCH== ${env.DEV_BRANCH}) {
-                            TARGET_BRANCH = env.PREPROD_BRANCH
+                        if (env.GIT_BRANCH== env.DEV_BRANCH) {
+                                TARGET_BRANCH = env.PREPROD_BRANCH
+                        }
+                        if (env.GIT_BRANCH == env.PREPROD_BRANCH) {
+                                TARGET_BRANCH = env.PROD_BRANCH
+                        }
+                        if (env.TARGET_BRANCH == '')
+                        {
+                                echo "Branch >${env.GIT_BRANCH}< looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job"
+                                error("Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
+                        }
                     }
-                    if (env.GIT_BRANCH == env.PREPROD_BRANCH) {
-                            TARGET_BRANCH = env.PROD_BRANCH
-                    }
-                    if (env.TARGET_BRANCH == '')
-                    {
-                            echo "Branch >${env.GIT_BRANCH}< looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job"
-                            error("Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
-                    }
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+
+                    // We need to explicitly checkout from SCM here
+                    echo 'Clean up workspace before we start ..'
+                    cleanWs()
+                    checkout scm
+
                 }
+
+            }
+
+        }
+
+        stage('Build') {
+
+            steps {
+
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
                 echo "Branch ${env.GIT_BRANCH} and ${env.BRANCH_NAME}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
