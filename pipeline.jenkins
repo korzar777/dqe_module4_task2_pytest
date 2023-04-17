@@ -22,7 +22,7 @@ pipeline {
         //    }
         //}
 
-        stage("Preparing (Cleanup set to ${env.MAKE_CLEANUP_BEFORE_RUN})" {
+        stage("Preparing (Cleanup set to ${env.MAKE_CLEANUP_BEFORE_RUN})") {
             steps {
                 script {
 
