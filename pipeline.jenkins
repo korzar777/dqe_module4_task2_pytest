@@ -42,7 +42,7 @@ pipeline {
                 echo 'Testing..'
 
                 withEnv(["HOME=${env.WORKSPACE}"]) {
-                    sh "python3 -m pytest -m jobs --alluredir=reports/allure-results"
+                    sh "python3 -m pytest -m jobs --alluredir=reports/allure_results"
                     //sh 'python3 -m pytest  --alluredir=reports/allure-results'
                 }
             }
@@ -55,8 +55,8 @@ pipeline {
                             jdk: '',
                             properties: [],
                             reportBuildPolicy: 'ALWAYS',
-                            report: "${env.WORKSPACE}/reports/allure-report",
-                            results: [[path: "${env.WORKSPACE}/reports/allure-results"]]
+                            report: "reports/allure_report",
+                            results: [[path: "reports/allure_results"]]
                     ])
                 }
             }
