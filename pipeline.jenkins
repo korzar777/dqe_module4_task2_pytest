@@ -26,7 +26,8 @@ pipeline {
 
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     //sh 'python3 -m pytest --junit-xml test-reports/results.xml'
-                    sh 'python3 -m pytest -m jobs --alluredir=reports/allure-results'
+                    //sh 'python3 -m pytest -m jobs --alluredir=reports/allure-results'
+                    sh 'python3 -m pytest  --alluredir=reports/allure-results'
                 }
             }
             //post {
