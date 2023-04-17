@@ -56,7 +56,7 @@ pipeline {
                             properties: [],
                             reportBuildPolicy: 'ALWAYS',
                             report: 'reports/allure-report',
-                            results: [[path: '${env.WORKSPACE}/reports/allure-results']]
+                            results: [[path: 'reports/allure-results']]
                     ])
                 }
             }
