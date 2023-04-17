@@ -96,17 +96,17 @@ pipeline {
         }
         stage('Reports') {
             steps {
+                sh './node_modules/.bin/allure generate ./allure-results'
                 allure([
                     includeProperties: false,
                     jdk: '',
                     properties: [],
                     reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'reports']]
+                    report: 'reports/allure-report',
+                    results: [[path: 'reports/allure-results']]
                     ])
             }
         }
-
-
 
 
     }
