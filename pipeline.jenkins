@@ -8,10 +8,12 @@ pipeline {
         PREPROD_BRANCH = 'pre-prod'
         PROD_BRANCH = 'production'
         DEV_BRANCH = 'dev_local'
-        if (env.GIT_BRANCH == env.DEV_BRANCH) {
-            TARGET_BRANCH = env.PREPROD_BRANCH
-        } else {
-            TARGET_BRANCH = env.PROD_BRANCH
+        script {
+            if (env.GIT_BRANCH == env.DEV_BRANCH) {
+                TARGET_BRANCH = env.PREPROD_BRANCH
+            } else {
+                TARGET_BRANCH = env.PROD_BRANCH
+            }
         }
     }
     options {
