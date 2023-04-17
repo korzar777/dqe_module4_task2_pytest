@@ -15,8 +15,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                echo 'Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}'
-                echo 'Branch ${env.GIT_BRANCH}'
+                echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
+                echo "Branch ${env.GIT_BRANCH}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     //sh 'python3 -m pip install --upgrade pip'
 
