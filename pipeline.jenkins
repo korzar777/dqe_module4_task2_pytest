@@ -103,9 +103,9 @@ pipeline {
                     reportBuildPolicy: 'ALWAYS',
                     results: [[path: 'reports']]
                     ])
-                }
             }
         }
+
 
 
 
