@@ -23,7 +23,7 @@ pipeline {
 
             steps {
                 script {
-                    if ("${env.GIT_BRANCH}" == "${env.GIT_BRANCH}") {
+                    if ("dev_local" == "dev_local") {
                             TARGET_BRANCH = env.PREPROD_BRANCH
                     }
                     if (env.GIT_BRANCH == env.PREPROD_BRANCH) {
