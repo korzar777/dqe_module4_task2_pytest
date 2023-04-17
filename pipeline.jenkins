@@ -1,13 +1,78 @@
 pipeline {
-   agent any
+    agent any
 
-   stages {
-
-      stage('runpy') {
-        steps{      
-          bat 'python tests.py'
+    stages {
+        stage('Checkout Stage') {
+            steps {
+                checkout scmGit(branches: [[name: 'origin/dev_local']], extensions: [], userRemoteConfigs: [[credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', url: 'https://github.com/korzar777/dqe_module4_task2_pytest.git/']])
+            }
         }
+        stage('Build') {
+            steps {
+                echo 'Building..'
+
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+                    sh 'python3 -m pip install --upgrade pip'
+                    sh 'python3 -m venv venv'
+                    sh '. venv/bin/activate'
+                    sh 'pip install -r requirements.txt'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+                    //sh 'python3 -m pytest --junit-xml test-reports/results.xml'
+                    sh 'python3 -m pytest -m jobs'
+                }
+            }
+            //post {
+            //    always {
+            //        junit 'test-reports/results.xml'
+            //    }
+            //}
         }
 
-  }
+        stage('Deliver to git') {
+            steps {
+                echo 'Deploying....'
+                //withCredentials([sshUserPrivateKey(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', keyFileVariable: 'GITHUB_KEY')]) {
+                    //withEnv(["GIT_SSH_COMMAND=ssh -i $GITHUB_KEY -o StrictHostKeyChecking=no"]) {
+                    //    sh 'git push origin/dev_local origin/development'
+                    //}
+                //}
+                withCredentials([gitUsernamePassword(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', gitToolName: 'Default')]) {
+                    //sh 'git remote -v'
+                    //sh 'git checkout dev_local'
+                    //sh 'git pull'
+                    sh 'git status'
+                    //sh 'git fetch origin'
+                    //sh 'git checkout development'
+                    //sh 'git fetch'
+                    //sh "git merge dev_local development"
+                    //sh 'git config --global user.email "alex@example.com"'
+                    //sh 'git config --global user.name "Alex"'
+                    //sh "git commit"
+                    //sh 'git push origin development'
+                    //sh 'git reset --hard dev_local'
+                    //sh 'git push --force origin development'
+                    //sh 'git pull'
+                    //sh 'git checkout dev_local'
+                    //sh 'git diff development'
+                    //sh 'git reset --hard development'
+                    //sh 'git push --force origin dev_local'
+                    //sh 'git checkout dev_local'
+                    //sh 'git reset --hard development'
+                    //sh 'git push --force origin dev_local'
+                    //sh 'git pull'
+                    //sh 'git checkout development'
+                    //sh "git merge origin/development  origin/dev_local"
+                    //sh 'git checkout development'
+                    //sh 'git push'
+                }
+            }
+        }
+    }
 }
