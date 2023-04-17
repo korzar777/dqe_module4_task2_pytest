@@ -6,6 +6,10 @@ pipeline {
         FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
         GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
     }
+    //options {
+        // This is required if you want to clean before build
+    //    skipDefaultCheckout(true)
+    //}
     stages {
         //stage('Checkout Stage') {
         //    steps {
@@ -14,6 +18,10 @@ pipeline {
         //}
         stage('Build') {
             steps {
+                cleanWs()
+                // We need to explicitly checkout from SCM here
+                //echo 'Clean workspace before we start ..'
+                //checkout scm
                 echo 'Building..'
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
                 echo "Branch ${env.GIT_BRANCH}"
@@ -57,6 +65,18 @@ pipeline {
                 echo 'Test passed...Merging current dev results to pre-prod branch.'
                 withCredentials([gitUsernamePassword(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', gitToolName: 'Default')]) {
                     sh 'git push origin HEAD:pre_prod'
+                }
+            }
+            post {
+            // Clean after build
+                echo 'Clean workspace'
+                always {
+                    cleanWs(cleanWhenNotBuilt: false,
+                            deleteDirs: true,
+                            disableDeferredWipeout: true,
+                            notFailBuild: true,
+                            patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                                       [pattern: '.propsfile', type: 'EXCLUDE']])
                 }
             }
         }
