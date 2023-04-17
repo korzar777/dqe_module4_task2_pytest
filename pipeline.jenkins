@@ -25,90 +25,50 @@ pipeline {
                 echo 'Testing..'
 
                 withEnv(["HOME=${env.WORKSPACE}"]) {
-                    //sh 'python3 -m pytest --junit-xml test-reports/results.xml'
                     //sh 'python3 -m pytest -m jobs --alluredir=reports/allure-results'
                     sh 'python3 -m pytest  --alluredir=reports/allure-results'
                 }
             }
-            //post {
-            //    // If pytest was able to run the tests, even if some of the test
-            //    // failed, record the test results and archive the jar file.
-            //    success { allure([
-            //        includeProperties: false,
-            //        jdk: '',
-            //        properties: [],
-            //        reportBuildPolicy: 'ALWAYS',
-            //        results: [[path: 'reports/allure-results']]
-            //        ])
-            //    }
-            //}
+            post {
+                // If pytest was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    allure([
+                            includeProperties: false,
+                            jdk: '',
+                            properties: [],
+                            reportBuildPolicy: 'ALWAYS',
+                            report: 'reports/allure-report',
+                            results: [[path: 'reports/allure-results']]
+                    ])
+                }
+            }
         }
 
         stage('Deliver to git') {
             steps {
                 echo 'Test passed...Merging current dev results to pre-prod branch.'
-                //withCredentials([sshUserPrivateKey(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', keyFileVariable: 'GITHUB_KEY')]) {
-                    //withEnv(["GIT_SSH_COMMAND=ssh -i $GITHUB_KEY -o StrictHostKeyChecking=no"]) {
-                    //    sh 'git push origin/dev_local origin/development'
-                    //}
-                //}
                 withCredentials([gitUsernamePassword(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', gitToolName: 'Default')]) {
-
-                    //sh 'git branch --list'
-                    //sh 'git checkout -b dev_local origin/dev_local'
-                    //sh 'git status'
-                    //sh 'git config --global user.email "alex@example.com"'
-                    //sh 'git config --global user.name "Alex"'
-                    //sh 'git pull --ff-only'
-                    //sh 'git checkout -b development origin/development'
-                    //sh 'git fetch --ff-only'
-                    //sh 'git merge dev_local'
-                    //sh 'git push -o merge_request.create -o merge_request.target=development origin'
+                    sh 'git diff pre_prod'
                     sh 'git push origin HEAD:pre_prod'
-                    //sh 'git remote -v'
-                    //sh 'git checkout dev_local'
-                    //sh 'git pull'
-                    //sh 'git status'
-                    //sh 'git push'
-                    //sh 'git fetch origin'
-                    //sh 'git checkout development'
-                    //sh 'git fetch'
-                    //sh "git merge dev_local development"
-                    //sh 'git config --global user.email "alex@example.com"'
-                    //sh 'git config --global user.name "Alex"'
-                    //sh "git commit"
-                    //sh 'git push origin development'
-                    //sh 'git reset --hard dev_local'
-                    //sh 'git push --force origin development'
-                    //sh 'git pull'
-                    //sh 'git checkout dev_local'
-                    //sh 'git diff development'
-                    //sh 'git reset --hard development'
-                    //sh 'git push --force origin dev_local'
-                    //sh 'git checkout dev_local'
-                    //sh 'git reset --hard development'
-                    //sh 'git push --force origin dev_local'
-                    //sh 'git pull'
-                    //sh 'git checkout development'
-                    //sh "git merge origin/development  origin/dev_local"
-                    //sh 'git checkout development'
-                    //sh 'git push'
                 }
             }
         }
-        stage('Reports') {
-            steps {
-                //sh './node_modules/.bin/allure generate ./allure-results'
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    properties: [],
-                    reportBuildPolicy: 'ALWAYS',
-                    report: 'reports/allure-report',
-                    results: [[path: 'reports/allure-results']]
-                    ])
-            }
-        }
+        //stage('Reports') {
+         //   steps {
+         //       echo 'Generating test report and sending - report will be attached to jenkins whenever ..'
+         //       success {
+         //               allure([
+         //                   includeProperties: false,
+         //                   jdk: '',
+         //                   properties: [],
+         //                   reportBuildPolicy: 'ALWAYS',
+         //                   report: 'reports/allure-report',
+         //                   results: [[path: 'reports/allure-results']]
+         //               ])
+         //       }
+         //   }
+        //}
 
 
     }
