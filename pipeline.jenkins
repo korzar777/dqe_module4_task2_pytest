@@ -28,18 +28,18 @@ pipeline {
                     sh 'python3 -m pytest -m jobs --alluredir=reports/allure-results'
                 }
             }
-            post {
-                // If pytest was able to run the tests, even if some of the test
-                // failed, record the test results and archive the jar file.
-                success { allure([
-                    includeProperties: false,
-                    jdk: '',
-                    properties: [],
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'reports/allure-results']]
-                    ])
-                }
-            }
+            //post {
+            //    // If pytest was able to run the tests, even if some of the test
+            //    // failed, record the test results and archive the jar file.
+            //    success { allure([
+            //        includeProperties: false,
+            //        jdk: '',
+            //        properties: [],
+            //        reportBuildPolicy: 'ALWAYS',
+            //        results: [[path: 'reports/allure-results']]
+            //        ])
+            //    }
+            //}
         }
 
         stage('Deliver to git') {
@@ -94,5 +94,20 @@ pipeline {
                 }
             }
         }
+        stage('Reports') {
+            steps {
+                allure([
+                    includeProperties: false,
+                    jdk: '',
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'reports']]
+                    ])
+                }
+            }
+        }
+
+
+
     }
 }
