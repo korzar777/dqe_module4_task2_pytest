@@ -7,7 +7,7 @@ pipeline {
         GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
         PREPROD_BRANCH = 'pre-prod'
         PROD_BRANCH = 'production'
-        DEV_BRANCH = 'dev_local'
+        DEV_BRANCH = "dev_local"
     }
     options {
         // This is required if you want to clean before build
