@@ -18,14 +18,16 @@ pipeline {
         //}
         stage('Build') {
             steps {
-                cleanWs()
-                // We need to explicitly checkout from SCM here
-                echo 'Clean up workspace before we start ..'
-                checkout scm
-                echo 'Building..'
+
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
                 echo "Branch ${env.GIT_BRANCH}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
+
+                    // We need to explicitly checkout from SCM here
+                    echo 'Clean up workspace before we start ..'
+                    cleanWs()
+                    checkout scm
+                    echo 'Building..'
                     //sh 'python3 -m pip install --upgrade pip'
 
                     sh 'python3 -m venv venv'
@@ -40,7 +42,7 @@ pipeline {
                 echo 'Testing..'
 
                 withEnv(["HOME=${env.WORKSPACE}"]) {
-                    sh 'python3 -m pytest -m jobs --alluredir=${env.WORKSPACE}/reports/allure-results'
+                    sh 'python3 -m pytest -m jobs --alluredir=reports/allure-results'
                     //sh 'python3 -m pytest  --alluredir=reports/allure-results'
                 }
             }
@@ -53,7 +55,7 @@ pipeline {
                             jdk: '',
                             properties: [],
                             reportBuildPolicy: 'ALWAYS',
-                            report: '${env.WORKSPACE}/reports/allure-report',
+                            report: 'reports/allure-report',
                             results: [[path: '${env.WORKSPACE}/reports/allure-results']]
                     ])
                 }
