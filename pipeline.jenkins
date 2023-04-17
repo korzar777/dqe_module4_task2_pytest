@@ -49,7 +49,7 @@ pipeline {
                     sh 'git status'
                     sh 'git config --global user.email "alex@example.com"'
                     sh 'git config --global user.name "Alex"'
-                    sh 'git pull'
+                    sh 'git config pull.ff only'
                     sh 'git checkout development'
                     sh 'git merge dev_local'
                     //sh 'git remote -v'
