@@ -5,6 +5,14 @@ pipeline {
         APP_BUILD_ID = 0.1
         FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
         GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
+        PREPROD_BRANCH = 'pre-prod'
+        PROD_BRANCH = 'production'
+        DEV_BRANCH = 'dev_local'
+        if (env.GIT_BRANCH == env.DEV_BRANCH) {
+            TARGET_BRANCH = env.PREPROD_BRANCH
+        } else {
+            TARGET_BRANCH = env.PROD_BRANCH
+        }
     }
     options {
         // This is required if you want to clean before build
@@ -47,8 +55,7 @@ pipeline {
                 }
             }
             post {
-                // If pytest was able to run the tests, even if some of the test
-                // failed, show report.
+                // If pytest was able to run the tests, even if some of the test failed, show report.
                 always {
                     allure([
                             includeProperties: false,
@@ -64,9 +71,9 @@ pipeline {
 
         stage('Deliver to git') {
             steps {
-                echo 'Test passed...Merging current dev results to pre-prod branch.'
+                echo "Test passed...Merging current ${GIT_BRANCH} branch to ${TARGET_BRANCH} branch."
                 withCredentials([gitUsernamePassword(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', gitToolName: 'Default')]) {
-                    sh 'git push origin HEAD:pre_prod'
+                    sh "git push origin HEAD:${TARGET_BRANCH}"
                 }
             }
             //post {
