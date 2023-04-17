@@ -44,10 +44,19 @@ pipeline {
                     //}
                 //}
                 withCredentials([gitUsernamePassword(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', gitToolName: 'Default')]) {
+                    sh 'git branch --list'
+                    sh 'git checkout dev_local'
+                    sh 'git status'
+                    sh 'git config --global user.email "alex@example.com"'
+                    sh 'git config --global user.name "Alex"'
+                    sh 'git pull'
+                    sh 'git checkout development'
+                    sh 'git merge dev_local'
                     //sh 'git remote -v'
                     //sh 'git checkout dev_local'
                     //sh 'git pull'
                     sh 'git status'
+                    sh 'git push'
                     //sh 'git fetch origin'
                     //sh 'git checkout development'
                     //sh 'git fetch'
