@@ -30,7 +30,7 @@ pipeline {
                             TARGET_BRANCH = env.PROD_BRANCH
                     }
                     else {
-                            echo "Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job"
+                            echo '''Branch >${env.GIT_BRANCH}< looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job'''
                             error("Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
                         }
                 }
