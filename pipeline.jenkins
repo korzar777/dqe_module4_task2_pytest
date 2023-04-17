@@ -8,13 +8,6 @@ pipeline {
         PREPROD_BRANCH = 'pre-prod'
         PROD_BRANCH = 'production'
         DEV_BRANCH = 'dev_local'
-        script {
-            if (env.GIT_BRANCH == env.DEV_BRANCH) {
-                TARGET_BRANCH = env.PREPROD_BRANCH
-            } else {
-                TARGET_BRANCH = env.PROD_BRANCH
-            }
-        }
     }
     options {
         // This is required if you want to clean before build
@@ -27,6 +20,11 @@ pipeline {
         //    }
         //}
         stage('Build') {
+            if (env.GIT_BRANCH == env.DEV_BRANCH) {
+                    TARGET_BRANCH = env.PREPROD_BRANCH
+                } else {
+                    TARGET_BRANCH = env.PROD_BRANCH
+                }
             steps {
 
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
