@@ -9,6 +9,7 @@ pipeline {
         PROD_BRANCH = 'production'
         DEV_BRANCH = "dev_local"
         TARGET_BRANCH =  ""
+        MAKE_CLEANUP_BEFORE_RUN = 'true'
     }
     options {
         // This is required if you want to clean before build
@@ -21,7 +22,7 @@ pipeline {
         //    }
         //}
 
-        stage('Preparing') {
+        stage("Preparing (Cleanup set to ${env.MAKE_CLEANUP_BEFORE_RUN})" {
             steps {
                 script {
 
@@ -36,13 +37,16 @@ pipeline {
                                 echo "Branch >${env.GIT_BRANCH}< looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job"
                                 error("Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
                         }
-                    }
+                }
                 withEnv(["HOME=${env.WORKSPACE}"]) {
-
-                    // We need to explicitly checkout from SCM here
-                    echo 'Clean up workspace before we start ..'
-                    cleanWs()
-                    checkout scm
+                    script {
+                        if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
+                            // We need to explicitly checkout from SCM here
+                            echo 'Clean up workspace before we start ..'
+                            cleanWs()
+                            checkout scm
+                        }
+                    }
 
                 }
 
