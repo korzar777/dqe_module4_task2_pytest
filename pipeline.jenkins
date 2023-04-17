@@ -25,19 +25,25 @@ pipeline {
 
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     //sh 'python3 -m pytest --junit-xml test-reports/results.xml'
-                    sh 'python3 -m pytest -m jobs'
+                    sh 'python3 -m pytest -m jobs --alluredir=reports/allure-results'
                 }
             }
-            //post {
-            //    always {
-            //        junit 'test-reports/results.xml'
-            //    }
-            //}
+            post {
+                // If pytest was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success { allure([
+                    includeProperties: false,
+                    jdk: '',
+                    properties: [],
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: 'reports/allure-results']]
+                ])
+            }
         }
 
         stage('Deliver to git') {
             steps {
-                echo 'Deploying....'
+                echo 'Test passed...Merging current dev results to pre-prod branch.'
                 //withCredentials([sshUserPrivateKey(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', keyFileVariable: 'GITHUB_KEY')]) {
                     //withEnv(["GIT_SSH_COMMAND=ssh -i $GITHUB_KEY -o StrictHostKeyChecking=no"]) {
                     //    sh 'git push origin/dev_local origin/development'
@@ -59,7 +65,7 @@ pipeline {
                     //sh 'git remote -v'
                     //sh 'git checkout dev_local'
                     //sh 'git pull'
-                    sh 'git status'
+                    //sh 'git status'
                     //sh 'git push'
                     //sh 'git fetch origin'
                     //sh 'git checkout development'
