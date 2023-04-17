@@ -55,7 +55,7 @@ pipeline {
                     //sh 'git fetch --ff-only'
                     //sh 'git merge dev_local'
                     //sh 'git push -o merge_request.create -o merge_request.target=development origin'
-                    sh 'git push origin HEAD:development''
+                    sh 'git push origin HEAD:development'
                     //sh 'git remote -v'
                     //sh 'git checkout dev_local'
                     //sh 'git pull'
