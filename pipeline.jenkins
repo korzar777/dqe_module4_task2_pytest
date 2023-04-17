@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout Stage') {
-            steps {
-                checkout scmGit(branches: [[name: 'origin/dev_local']], extensions: [], userRemoteConfigs: [[credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', url: 'https://github.com/korzar777/dqe_module4_task2_pytest.git/']])
-            }
-        }
+        //stage('Checkout Stage') {
+        //    steps {
+        //        checkout scmGit(branches: [[name: 'origin/dev_local']], extensions: [], userRemoteConfigs: [[credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', url: 'https://github.com/korzar777/dqe_module4_task2_pytest.git/']])
+        //    }
+        //}
         stage('Build') {
             steps {
                 echo 'Building..'
@@ -53,21 +53,7 @@ pipeline {
                 }
             }
         }
-        //stage('Reports') {
-         //   steps {
-         //       echo 'Generating test report and sending - report will be attached to jenkins whenever ..'
-         //       success {
-         //               allure([
-         //                   includeProperties: false,
-         //                   jdk: '',
-         //                   properties: [],
-         //                   reportBuildPolicy: 'ALWAYS',
-         //                   report: 'reports/allure-report',
-         //                   results: [[path: 'reports/allure-results']]
-         //               ])
-         //       }
-         //   }
-        //}
+
 
 
     }
