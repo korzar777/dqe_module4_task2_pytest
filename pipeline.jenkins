@@ -22,7 +22,7 @@ pipeline {
             steps {
                 script {
                         if ("${env.PREPROD_BRANCH}"=="dqe_load_to_preprod") {
-                            env.GIT_BRANCH = "dev_local"
+                            env.GIT_BRANCH = env.DEV_BRANCH
                         }
                         else {
                             env.GIT_BRANCH = "pre_prod"
