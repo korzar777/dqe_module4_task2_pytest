@@ -24,11 +24,13 @@ pipeline {
                 sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
                 sh "echo 'Hello2 from ${env.GIT_BRANCH} branch!'"
                 script {
-                        echo "PREPROD_BRANCH: >${env.PREPROD_BRANCH}<"
-                        if ("${env.PREPROD_BRANCH}"=='dqe_load_to_preprod') {
+                        echo "JOB_NAME: >${env.JOB_NAME}<"
+                        if ("${env.JOB_NAME}"=='dqe_load_to_preprod') {
                             echo 'Hello from main branch'
+                            env.GIT_BRANCH = env.DEV_BRANCH
                         } else {
                             echo 'Hello from smth other '
+                            env.GIT_BRANCH = env.PREPROD_BRANCH
                         }
                         //    sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
                         ///    env.GIT_BRANCH = env.DEV_BRANCH
