@@ -5,7 +5,7 @@ pipeline {
         APP_BUILD_ID = 0.1
         FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
         GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
-        GIT_BRANCH = "${env.JOB_NAME} == 'dqe_load_to_prod' ? 'pre_prod' : 'dev_local'
+        //GIT_BRANCH = "${env.JOB_NAME} == 'dqe_load_to_prod' ? 'pre_prod' : 'dev_local'
         PREPROD_BRANCH = 'pre_prod'
         PROD_BRANCH = 'production'
         DEV_BRANCH = "dev_local"
@@ -55,7 +55,7 @@ pipeline {
             steps {
 
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
-                echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH}"
+                echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH} + ${env.BRANCH_NAME}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
 
                     sh 'python3 -m venv venv'
