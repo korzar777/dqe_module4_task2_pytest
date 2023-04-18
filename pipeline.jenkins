@@ -27,10 +27,10 @@ pipeline {
                         echo "JOB_NAME: >${env.JOB_NAME}<"
                         if ("${env.JOB_NAME}"=='dqe_load_to_preprod') {
                             echo 'Hello from main branch'
-                            env.GIT_BRANCHLOC = env.DEV_BRANCH
+                            GIT_BRANCHLOC = env.DEV_BRANCH
                         } else {
                             echo 'Hello from smth other '
-                            env.GIT_BRANCHLOC = env.PREPROD_BRANCH
+                            GIT_BRANCHLOC = env.PREPROD_BRANCH
                         }
                         sh "echo 'updated git branch to ${env.GIT_BRANCHLOC} branch!'"
                         ///    env.GIT_BRANCH = env.DEV_BRANCH
