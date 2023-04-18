@@ -4,7 +4,7 @@ pipeline {
     environment {
         APP_BUILD_ID = 0.1
         FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
-        GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
+        GIT_BRANCHLOC = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
         //GIT_BRANCH = ''
         PREPROD_BRANCH = 'pre_prod'
         PROD_BRANCH = 'production'
@@ -22,34 +22,34 @@ pipeline {
             steps {
                 //GIT_BRANCH = FULL_PATH_BRANCH.substring(env.GIT_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
                 sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
-                sh "echo 'Hello2 from ${env.GIT_BRANCH} branch!'"
+                sh "echo 'Hello2 from ${env.GIT_BRANCHLOC} branch!'"
                 script {
                         echo "JOB_NAME: >${env.JOB_NAME}<"
                         if ("${env.JOB_NAME}"=='dqe_load_to_preprod') {
                             echo 'Hello from main branch'
-                            env.GIT_BRANCH = env.DEV_BRANCH
+                            env.GIT_BRANCHLOC = env.DEV_BRANCH
                         } else {
                             echo 'Hello from smth other '
-                            env.GIT_BRANCH = env.PREPROD_BRANCH
+                            env.GIT_BRANCHLOC = env.PREPROD_BRANCH
                         }
-                        sh "echo 'updated git branch is from ${env.GIT_BRANCH} branch!'"
+                        sh "echo 'updated git branch to ${env.GIT_BRANCHLOC} branch!'"
                         ///    env.GIT_BRANCH = env.DEV_BRANCH
                         //
                         //else {
                         //    env.GIT_BRANCH = "pre_prod"
                         //}
-                        if (env.GIT_BRANCH== env.DEV_BRANCH) {
+                        if (env.GIT_BRANCHLOC== env.DEV_BRANCH) {
                                 TARGET_BRANCH = env.PREPROD_BRANCH
                                 echo 'target set to preprod '
                         }
-                        if (env.GIT_BRANCH == env.PREPROD_BRANCH) {
+                        if (env.GIT_BRANCHLOC == env.PREPROD_BRANCH) {
                                 TARGET_BRANCH = env.PROD_BRANCH
                                 echo 'target set to prod '
                         }
                         if (env.TARGET_BRANCH == '')
                         {
-                                echo "Branch >${env.GIT_BRANCH}< looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job"
-                                error("Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
+                                echo "Branch >${env.GIT_BRANCHLOC}< looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job"
+                                error("Branch ${env.GIT_BRANCHLOC} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
                         }
                 }
                 withEnv(["HOME=${env.WORKSPACE}"]) {
@@ -73,7 +73,7 @@ pipeline {
             steps {
 
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}<<<"
-                echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH} + ${env.BRANCH_NAME}"
+                echo "Current branch ${env.GIT_BRANCHLOC} and target branch is ${TARGET_BRANCH} + ${env.BRANCH_NAME}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
 
                     sh 'python3 -m venv venv'
@@ -109,7 +109,7 @@ pipeline {
 
         stage('Deliver to git') {
             steps {
-                echo "Test passed...Merging current ${env.GIT_BRANCH} branch to ${TARGET_BRANCH} branch."
+                echo "Test passed...Merging current ${env.GIT_BRANCHLOC} branch to ${TARGET_BRANCH} branch."
                 withCredentials([gitUsernamePassword(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', gitToolName: 'Default')]) {
                     sh "git push origin HEAD:${TARGET_BRANCH}"
                 }
