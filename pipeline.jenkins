@@ -20,10 +20,12 @@ pipeline {
         stage("Preparations/Cleanup") {
             steps {
                 script {
-                        if (env.JOB_NAME == 'dqe_load_to_preprod')
+                        if (env.JOB_NAME == 'dqe_load_to_preprod') {
                             GIT_BRANCH = "dev_local"
-                        else
+                        }
+                        else {
                             GIT_BRANCH = 'pre_prod'
+                        }
                         if (env.GIT_BRANCH== env.DEV_BRANCH) {
                                 TARGET_BRANCH = env.PREPROD_BRANCH
                         }
