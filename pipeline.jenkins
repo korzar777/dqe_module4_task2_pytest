@@ -101,18 +101,7 @@ pipeline {
                     sh "git push origin HEAD:${TARGET_BRANCH}"
                 }
             }
-            //post {
-            // Clean after build
-            //    echo 'Clean workspace'
-            //    always {
-            //        cleanWs(cleanWhenNotBuilt: false,
-            //                deleteDirs: true,
-            //                disableDeferredWipeout: true,
-            //                notFailBuild: true,
-            //                patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
-            //                           [pattern: '.propsfile', type: 'EXCLUDE']])
-            //    }
-            //}
+
         }
 
 
