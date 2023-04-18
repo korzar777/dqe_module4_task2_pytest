@@ -27,12 +27,12 @@ pipeline {
                         echo "JOB_NAME: >${env.JOB_NAME}<"
                         if ("${env.JOB_NAME}"=='dqe_load_to_preprod') {
                             echo 'Hello from main branch'
-                            GIT_BRANCH = env.DEV_BRANCH
+                            env.GIT_BRANCH = env.DEV_BRANCH
                         } else {
                             echo 'Hello from smth other '
-                            GIT_BRANCH = env.PREPROD_BRANCH
+                            env.GIT_BRANCH = env.PREPROD_BRANCH
                         }
-                        //    sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
+                        sh "echo 'updated git branch is from ${env.GIT_BRANCH} branch!'"
                         ///    env.GIT_BRANCH = env.DEV_BRANCH
                         //
                         //else {
@@ -40,9 +40,11 @@ pipeline {
                         //}
                         if (env.GIT_BRANCH== env.DEV_BRANCH) {
                                 TARGET_BRANCH = env.PREPROD_BRANCH
+                                echo 'target set to preprod '
                         }
                         if (env.GIT_BRANCH == env.PREPROD_BRANCH) {
                                 TARGET_BRANCH = env.PROD_BRANCH
+                                echo 'target set to prod '
                         }
                         if (env.TARGET_BRANCH == '')
                         {
