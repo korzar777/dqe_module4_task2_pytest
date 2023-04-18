@@ -21,7 +21,9 @@ pipeline {
         stage("Preparations/Cleanup") {
             steps {
                 script {
-                        if ("${env.PREPROD_BRANCH}"=="dqe_load_to_preprod") {
+                        if ("${env.PREPROD_BRANCH}"=='dqe_load_to_preprod') {
+                            echo 'Hello from main branch'
+                            sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
                             env.GIT_BRANCH = env.DEV_BRANCH
                         }
                         else {
