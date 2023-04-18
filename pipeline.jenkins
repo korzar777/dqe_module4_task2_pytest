@@ -18,7 +18,9 @@ pipeline {
     }
     stages {
         stage("sdf") {
-        echo "XXXXXXX Branch ${env.GIT_BRANCH} and ${env.BRANCH_NAME}"
+           steps {
+                echo "XXXXXXX Branch ${env.GIT_BRANCH} and ${env.BRANCH_NAME}"
+               }
         }
 
         //stage('Checkout Stage') {
