@@ -5,7 +5,7 @@ pipeline {
         APP_BUILD_ID = 0.1
         //FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
         //GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
-        GIT_BRANCH = ''
+        //GIT_BRANCH = ''
         PREPROD_BRANCH = 'pre_prod'
         PROD_BRANCH = 'production'
         DEV_BRANCH = "dev_local"
@@ -20,15 +20,17 @@ pipeline {
 
         stage("Preparations/Cleanup") {
             steps {
+                sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
+                sh "echo 'Hello2 from ${env.GIT_BRANCH} branch!'"
                 script {
-                        if ("${env.PREPROD_BRANCH}"=='dqe_load_to_preprod') {
-                            echo 'Hello from main branch'
-                            sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
-                            env.GIT_BRANCH = env.DEV_BRANCH
-                        }
-                        else {
-                            env.GIT_BRANCH = "pre_prod"
-                        }
+                        //if ("${env.PREPROD_BRANCH}"=='dqe_load_to_preprod') {
+                        //    echo 'Hello from main branch'
+                        //    sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
+                        ///    env.GIT_BRANCH = env.DEV_BRANCH
+                        /
+                        //else {
+                        //    env.GIT_BRANCH = "pre_prod"
+                        //}
                         if (env.GIT_BRANCH== env.DEV_BRANCH) {
                                 TARGET_BRANCH = env.PREPROD_BRANCH
                         }
