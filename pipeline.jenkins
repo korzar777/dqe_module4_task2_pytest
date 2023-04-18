@@ -3,9 +3,9 @@ pipeline {
 
     environment {
         APP_BUILD_ID = 0.1
-        //FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
-        //GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
-        GIT_BRANCH = ''
+        FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
+        GIT_BRANCH = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
+        //GIT_BRANCH = ''
         PREPROD_BRANCH = 'pre_prod'
         PROD_BRANCH = 'production'
         DEV_BRANCH = "dev_local"
@@ -20,7 +20,7 @@ pipeline {
 
         stage("Preparations/Cleanup") {
             steps {
-                GIT_BRANCH = FULL_PATH_BRANCH.substring(env.GIT_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
+                //GIT_BRANCH = FULL_PATH_BRANCH.substring(env.GIT_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
                 sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
                 sh "echo 'Hello2 from ${env.GIT_BRANCH} branch!'"
                 script {
