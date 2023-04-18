@@ -38,7 +38,7 @@ pipeline {
                                 error("Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
                         }
                 }
-                echo "XXXXXXX Branch ${env.GIT_BRANCH} and ${env.TARGET_BRANCH} or ${TARGET_BRANCH}"
+                //echo "XXXXXXX Branch ${env.GIT_BRANCH} and ${env.TARGET_BRANCH} or ${TARGET_BRANCH}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     script {
                         if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
@@ -60,7 +60,7 @@ pipeline {
             steps {
 
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
-                echo "Branch ${env.GIT_BRANCH} and ${env.TARGET_BRANCH} or ${TARGET_BRANCH}"
+                echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
 
                     sh 'python3 -m venv venv'
@@ -96,9 +96,9 @@ pipeline {
 
         stage('Deliver to git') {
             steps {
-                echo "Test passed...Merging current ${env.GIT_BRANCH} branch to ${env.TARGET_BRANCH} branch."
+                echo "Test passed...Merging current ${env.GIT_BRANCH} branch to ${TARGET_BRANCH} branch."
                 withCredentials([gitUsernamePassword(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', gitToolName: 'Default')]) {
-                    sh "git push origin HEAD:${env.TARGET_BRANCH}"
+                    sh "git push origin HEAD:${TARGET_BRANCH}"
                 }
             }
             //post {
