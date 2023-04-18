@@ -38,6 +38,7 @@ pipeline {
                                 error("Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
                         }
                 }
+                echo "XXXXXXX Branch ${env.GIT_BRANCH} and ${env.TARGET_BRANCH} or ${TARGET_BRANCH}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     script {
                         if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
@@ -59,7 +60,7 @@ pipeline {
             steps {
 
                 echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
-                echo "Branch ${env.GIT_BRANCH} and ${env.BRANCH_NAME}"
+                echo "Branch ${env.GIT_BRANCH} and ${env.TARGET_BRANCH} or ${TARGET_BRANCH}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
 
                     sh 'python3 -m venv venv'
