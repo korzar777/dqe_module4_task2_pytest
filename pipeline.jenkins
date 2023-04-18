@@ -17,6 +17,10 @@ pipeline {
         skipDefaultCheckout(true)
     }
     stages {
+        stage("sdf") {
+        echo "XXXXXXX Branch ${env.GIT_BRANCH} and ${env.BRANCH_NAME}"
+        }
+
         //stage('Checkout Stage') {
         //    steps {
         //        checkout scmGit(branches: [[name: 'origin/dev_local']], extensions: [], userRemoteConfigs: [[credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', url: 'https://github.com/korzar777/dqe_module4_task2_pytest.git/']])
