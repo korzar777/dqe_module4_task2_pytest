@@ -21,7 +21,7 @@ pipeline {
         stage("Preparations/Cleanup") {
             steps {
                 script {
-                        if (env.JOB_NAME == "dqe_load_to_preprod") {
+                        if (env.JOB_NAME=="dqe_load_to_preprod") {
                             env.GIT_BRANCH = "dev_local"
                         }
                         else {
@@ -59,7 +59,7 @@ pipeline {
 
             steps {
 
-                echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}"
+                echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}<<<"
                 echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH} + ${env.BRANCH_NAME}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
 
