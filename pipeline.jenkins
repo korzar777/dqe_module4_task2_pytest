@@ -39,7 +39,7 @@ pipeline {
                                 error("Branch ${env.GIT_BRANCH} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
                         }
                 }
-                //echo "XXXXXXX Branch ${env.GIT_BRANCH} and ${env.TARGET_BRANCH} or ${TARGET_BRANCH}"
+                echo "XXXXXXX Branch ${env.GIT_BRANCH} and ${env.TARGET_BRANCH} or ${TARGET_BRANCH}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     script {
                         if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
