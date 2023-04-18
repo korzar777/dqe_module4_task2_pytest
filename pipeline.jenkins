@@ -27,7 +27,7 @@ pipeline {
                         //    echo 'Hello from main branch'
                         //    sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
                         ///    env.GIT_BRANCH = env.DEV_BRANCH
-                        /
+                        //
                         //else {
                         //    env.GIT_BRANCH = "pre_prod"
                         //}
