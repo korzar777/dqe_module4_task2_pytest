@@ -59,7 +59,8 @@ pipeline {
                 echo 'Testing..'
 
                 withEnv(["HOME=${env.WORKSPACE}"]) {
-                    sh "python3 -m pytest -m jobs --alluredir=reports/allure_results"
+                    //sh "python3 -m pytest -m jobs --alluredir=reports/allure_results"
+                    sh "python3 -m pytest -m employees --alluredir=reports/allure_results"
                     //sh 'python3 -m pytest  --alluredir=reports/allure_results'
                 }
             }
