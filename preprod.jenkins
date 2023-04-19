@@ -11,12 +11,14 @@ pipeline {
         DEV_BRANCH = "dev_local"
         GIT_BRANCH = "${DEV_BRANCH}"
         TARGET_BRANCH =  "${PREPROD_BRANCH}"
-        MAKE_CLEANUP_BEFORE_RUN = 'false'
+        MAKE_CLEANUP_BEFORE_RUN = 'true'
     }
     options {
         // This is required if you want to clean before build
-        if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
-            skipDefaultCheckout(true)
+        script {
+            if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
+                skipDefaultCheckout(true)
+            }
         }
     }
     stages {
@@ -30,6 +32,9 @@ pipeline {
                             echo 'Clean up workspace before we start ..'
                             cleanWs()
                             checkout scm
+                        }
+                        else {
+                            sh 'rm -r reports/allure-results/*'
                         }
                     }
 

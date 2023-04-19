@@ -11,7 +11,7 @@ pipeline {
         DEV_BRANCH = "dev_local"
         GIT_BRANCH = "${DEV_BRANCH}"
         TARGET_BRANCH =  "${PROD_BRANCH}"
-        MAKE_CLEANUP_BEFORE_RUN = 'false'
+        MAKE_CLEANUP_BEFORE_RUN = 'true'
     }
     options {
         // This is required if you want to clean before build
@@ -21,40 +21,8 @@ pipeline {
     }
     stages {
 
-        stage("Preparations/Cleanup") {
+        stage("Cleanup") {
             steps {
-                //GIT_BRANCH = FULL_PATH_BRANCH.substring(env.GIT_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
-                sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
-                sh "echo 'Hello2 from ${env.GIT_BRANCH} branch!'"
-                //script {
-                        //echo "JOB_NAME: >${env.JOB_NAME}<"
-                        //if ("${env.JOB_NAME}"=='dqe_load_to_preprod') {
-                        //    echo 'Hello from main branch'
-                        //    GIT_BRANCHLOC = env.DEV_BRANCH
-                        //} else {
-                        //    echo 'Hello from smth other '
-                        //    GIT_BRANCHLOC = "${env.PREPROD_BRANCH}"
-                        //}
-                        //sh "echo 'updated git branch to ${GIT_BRANCHLOC} branch!'"
-                        ///    env.GIT_BRANCH = env.DEV_BRANCH
-                        //
-                        //else {
-                        //    env.GIT_BRANCH = "pre_prod"
-                        //}
-                        //if (env.GIT_BRANCHLOC== env.DEV_BRANCH) {
-                        //        TARGET_BRANCH = env.PREPROD_BRANCH
-                        //        echo 'target set to preprod '
-                        //}
-                        //if (env.GIT_BRANCHLOC == env.PREPROD_BRANCH) {
-                        //        TARGET_BRANCH = env.PROD_BRANCH
-                        //        echo 'target set to prod '
-                        //}
-                        //if (env.TARGET_BRANCH == '')
-                        //{
-                        //        echo "Branch >${env.GIT_BRANCHLOC}< looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job"
-                        //        error("Branch ${env.GIT_BRANCHLOC} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
-                        //}
-                //}
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     script {
                         if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
