@@ -2,10 +2,7 @@ pipeline {
     agent any
 
     environment {
-        APP_BUILD_ID = 0.1
-        //FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
-        //GIT_BRANCHLOC = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
-        //GIT_BRANCH = ''
+        APP_BUILD_ID = "${env.BUILD_ID}"
         PREPROD_BRANCH = 'pre_prod'
         PROD_BRANCH = 'production'
         DEV_BRANCH = "dev_local"
@@ -46,8 +43,8 @@ pipeline {
 
             steps {
 
-                echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}<<<"
-                echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH} + ${env.BRANCH_NAME}"
+                echo "Running ${env.BUILD_ID}  and JOB ${env.JOB_NAME}"
+                echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
 
                     sh 'python3 -m venv venv'

@@ -29,6 +29,11 @@ pipeline {
                             cleanWs()
                             checkout scm
                         }
+                        else {
+                            echo 'Checkout repo ..'
+                            checkout scm
+                            sh 'rm -r reports/allure-results/*'
+                        }
                     }
 
                 }
@@ -41,7 +46,7 @@ pipeline {
 
             steps {
 
-                echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}<<<"
+                echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME}"
                 echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH} + ${env.BRANCH_NAME}"
                 withEnv(["HOME=${env.WORKSPACE}"]) {
 
