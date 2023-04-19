@@ -15,11 +15,7 @@ pipeline {
     }
     options {
         // This is required if you want to clean before build
-        script {
-            if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
-                skipDefaultCheckout(true)
-            }
-        }
+        skipDefaultCheckout(true)
     }
     stages {
 
@@ -34,6 +30,8 @@ pipeline {
                             checkout scm
                         }
                         else {
+                            echo 'Checkout repo ..'
+                            checkout scm
                             sh 'rm -r reports/allure-results/*'
                         }
                     }
