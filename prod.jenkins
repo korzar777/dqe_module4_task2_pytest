@@ -1,0 +1,124 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_BUILD_ID = 0.1
+        //FULL_PATH_BRANCH = "${sh(script:'git name-rev --name-only HEAD', returnStdout: true)}"
+        //GIT_BRANCHLOC = FULL_PATH_BRANCH.substring(FULL_PATH_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length()-1)
+        //GIT_BRANCH = ''
+        PREPROD_BRANCH = 'pre_prod'
+        PROD_BRANCH = 'production'
+        DEV_BRANCH = "dev_local"
+        GIT_BRANCH = DEV_BRANCH
+        TARGET_BRANCH =  PROD_BRANCH
+        MAKE_CLEANUP_BEFORE_RUN = 'false'
+    }
+    //options {
+        // This is required if you want to clean before build
+    //    skipDefaultCheckout(true)
+    //}
+    stages {
+
+        stage("Preparations/Cleanup") {
+            steps {
+                //GIT_BRANCH = FULL_PATH_BRANCH.substring(env.GIT_BRANCH.lastIndexOf('/') + 1, FULL_PATH_BRANCH.length())
+                sh "echo 'Hello from ${env.BRANCH_NAME} branch!'"
+                sh "echo 'Hello2 from ${env.GIT_BRANCH} branch!'"
+                //script {
+                        //echo "JOB_NAME: >${env.JOB_NAME}<"
+                        //if ("${env.JOB_NAME}"=='dqe_load_to_preprod') {
+                        //    echo 'Hello from main branch'
+                        //    GIT_BRANCHLOC = env.DEV_BRANCH
+                        //} else {
+                        //    echo 'Hello from smth other '
+                        //    GIT_BRANCHLOC = "${env.PREPROD_BRANCH}"
+                        //}
+                        //sh "echo 'updated git branch to ${GIT_BRANCHLOC} branch!'"
+                        ///    env.GIT_BRANCH = env.DEV_BRANCH
+                        //
+                        //else {
+                        //    env.GIT_BRANCH = "pre_prod"
+                        //}
+                        //if (env.GIT_BRANCHLOC== env.DEV_BRANCH) {
+                        //        TARGET_BRANCH = env.PREPROD_BRANCH
+                        //        echo 'target set to preprod '
+                        //}
+                        //if (env.GIT_BRANCHLOC == env.PREPROD_BRANCH) {
+                        //        TARGET_BRANCH = env.PROD_BRANCH
+                        //        echo 'target set to prod '
+                        //}
+                        //if (env.TARGET_BRANCH == '')
+                        //{
+                        //        echo "Branch >${env.GIT_BRANCHLOC}< looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}, stopping job"
+                        //        error("Branch ${env.GIT_BRANCHLOC} looks  wrong (expecting ${env.DEV_BRANCH} or ${env.PREPROD_BRANCH}), stopping job")
+                        //}
+                //}
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+                    script {
+                        if (env.MAKE_CLEANUP_BEFORE_RUN== 'true') {
+                            // We need to explicitly checkout from SCM here
+                            echo 'Clean up workspace before we start ..'
+                            cleanWs()
+                            checkout scm
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        stage('Build') {
+
+            steps {
+
+                echo "Running ${env.BUILD_ID} ${env.BUILD_DISPLAY_NAME} on ${env.NONE_NAME} and JOB ${env.JOB_NAME}<<<"
+                echo "Current branch ${env.GIT_BRANCH} and target branch is ${TARGET_BRANCH} + ${env.BRANCH_NAME}"
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+
+                    sh 'python3 -m venv venv'
+                    sh '. venv/bin/activate'
+                    sh 'pip install -r requirements.txt'
+                    //sh 'rm -r reports/allure-results/*'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'Testing..'
+
+                withEnv(["HOME=${env.WORKSPACE}"]) {
+                    sh "python3 -m pytest -m jobs --alluredir=reports/allure_results"
+                    //sh 'python3 -m pytest  --alluredir=reports/allure_results'
+                }
+            }
+            post {
+                // If pytest was able to run the tests, even if some of the test failed, show report.
+                always {
+                    allure([
+                            includeProperties: false,
+                            jdk: '',
+                            properties: [],
+                            reportBuildPolicy: 'ALWAYS',
+                            report: "reports/allure_report",
+                            results: [[path: "reports/allure_results"]]
+                    ])
+                }
+            }
+        }
+
+        stage('Deliver to git') {
+            steps {
+                echo "Test passed...Merging current ${env.GIT_BRANCH} branch to ${TARGET_BRANCH} branch."
+                withCredentials([gitUsernamePassword(credentialsId: '5ae0ff0a-fad7-4001-a96a-5a1d91a178de', gitToolName: 'Default')]) {
+                    sh "git push origin HEAD:${TARGET_BRANCH}"
+                }
+            }
+
+        }
+
+
+
+    }
+}
