@@ -9,8 +9,8 @@ pipeline {
         PREPROD_BRANCH = 'pre_prod'
         PROD_BRANCH = 'production'
         DEV_BRANCH = "dev_local"
-        GIT_BRANCH = DEV_BRANCH
-        TARGET_BRANCH =  PREPROD_BRANCH
+        GIT_BRANCH = "${DEV_BRANCH}"
+        TARGET_BRANCH =  "${PREPROD_BRANCH}"
         MAKE_CLEANUP_BEFORE_RUN = 'false'
     }
     //options {
